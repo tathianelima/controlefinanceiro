@@ -2,9 +2,19 @@ package br.com.tathiane.domain;
 
 import java.io.Serializable;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+//notação do JPA(dependencia reponsavel pelo mapeamento objeto-relacional)
+@Entity
 public class Categoria implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY) // o tipo de geração automatica do id deve ser compativel com o banco que vc esta usando(no caso do H2 console é o Entity)
 	private Integer id;
 	private String nome;
 	
