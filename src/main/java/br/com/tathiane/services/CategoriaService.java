@@ -15,7 +15,7 @@ public class CategoriaService {
 	private CategoriaRepository repo;
 	
 	public Categoria buscar(Integer id) {
-		Optional<Categoria> obj = repo.findById(id);
+		Optional<Categoria> obj = repo.findById(id);    //Optional: Objeto container que carrega o objeto categoria (encapsula o objeto estando instanciado ou não)
 		return obj.orElse(null);
 		
 		
