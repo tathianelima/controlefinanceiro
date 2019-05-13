@@ -1,30 +1,32 @@
 package br.com.tathiane.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
-//notação do JPA(dependencia reponsavel pelo mapeamento objeto-relacional)
+//mapeamento de herança criando uma tabela para cada subclasse (JOINED)
 @Entity
-public class Categoria implements Serializable{
+@Inheritance(strategy=InheritanceType.JOINED)
+public abstract class Movimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) // o tipo de geração automatica do id deve ser compativel com o banco que vc esta usando(no caso do H2 console é o Entity)
 	private Integer id;
-	private String nome;
+	private Date data;
+	private Double valor;
 	
-	public Categoria() {
+	public Movimento() {
 	}
 
-	public Categoria(Integer id, String nome) {
+	public Movimento(Integer id, Date data, Double valor) {
 		super();
 		this.id = id;
-		this.nome = nome;
+		this.data = data;
+		this.valor = valor;
 	}
 
 	public Integer getId() {
@@ -35,12 +37,20 @@ public class Categoria implements Serializable{
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public Date getData() {
+		return data;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Double getValor() {
+		return valor;
+	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 
 	@Override
@@ -59,7 +69,7 @@ public class Categoria implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Movimento other = (Movimento) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

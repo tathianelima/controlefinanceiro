@@ -7,21 +7,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-//notação do JPA(dependencia reponsavel pelo mapeamento objeto-relacional)
 @Entity
-public class Categoria implements Serializable{
+public class CartaoDeCredito implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) // o tipo de geração automatica do id deve ser compativel com o banco que vc esta usando(no caso do H2 console é o Entity)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	private String nome;
 	
-	public Categoria() {
+	public CartaoDeCredito() {
 	}
 
-	public Categoria(Integer id, String nome) {
+	public CartaoDeCredito(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -59,15 +57,13 @@ public class Categoria implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		CartaoDeCredito other = (CartaoDeCredito) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
+	}	
 	
-	
-
 }

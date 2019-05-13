@@ -1,27 +1,32 @@
 package br.com.tathiane.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
-//notação do JPA(dependencia reponsavel pelo mapeamento objeto-relacional)
+
 @Entity
-public class Categoria implements Serializable{
+public class Comprador implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY) // o tipo de geração automatica do id deve ser compativel com o banco que vc esta usando(no caso do H2 console é o Entity)
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	private String nome;
 	
-	public Categoria() {
+	@OneToMany(mappedBy="comprador")
+	private List<MovimentoCredito> compras = new ArrayList<>();
+	
+	public Comprador() {
 	}
 
-	public Categoria(Integer id, String nome) {
+	public Comprador(Integer id, String nome) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -43,6 +48,14 @@ public class Categoria implements Serializable{
 		this.nome = nome;
 	}
 
+	public List<MovimentoCredito> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(List<MovimentoCredito> compras) {
+		this.compras = compras;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -59,7 +72,7 @@ public class Categoria implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Comprador other = (Comprador) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -67,7 +80,5 @@ public class Categoria implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
 
 }
