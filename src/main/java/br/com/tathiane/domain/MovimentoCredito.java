@@ -6,24 +6,30 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class MovimentoCredito extends Movimento{
 	private static final long serialVersionUID = 1L;
 	
 	private String descricao;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="comprador_id")
 	private Comprador comprador;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="cartao_id")
 	private CartaoDeCredito cartao;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="fatura_id")
 	private FaturaCredito fatura;

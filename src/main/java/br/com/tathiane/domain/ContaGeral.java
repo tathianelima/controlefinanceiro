@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,7 +27,7 @@ public class ContaGeral implements Serializable{
 	@OneToMany(mappedBy="contaGeral")
 	private List<FaturaCredito> faturasCredito = new ArrayList<>();
 	
-	@OneToOne(mappedBy="contaGeral")
+	@OneToOne(cascade=CascadeType.ALL, mappedBy="contaGeral")
 	private FaturaDebito faturaDebito;
 	
 	@OneToMany(mappedBy="contaGeral")
@@ -41,13 +42,12 @@ public class ContaGeral implements Serializable{
 	public ContaGeral() {
 	}
 
-	public ContaGeral(Integer id, Date mes, Double totalReal, Double totalPrevisto, FaturaDebito faturaDebito) {
+	public ContaGeral(Integer id, Date mes, Double totalReal, Double totalPrevisto) {
 		super();
 		this.id = id;
 		this.mes = mes;
 		this.totalReal = totalReal;
 		this.totalPrevisto = totalPrevisto;
-		this.faturaDebito = faturaDebito;
 	}
 
 	public Integer getId() {
