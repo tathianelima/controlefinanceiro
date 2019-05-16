@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class ContaGeral implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -20,7 +22,10 @@ public class ContaGeral implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
+	
+	@JsonFormat(pattern="MM/yyyy")
 	private Date mes;
+	
 	private Double totalReal;
 	private Double totalPrevisto;
 	
@@ -31,13 +36,13 @@ public class ContaGeral implements Serializable{
 	private FaturaDebito faturaDebito;
 	
 	@OneToMany(mappedBy="contaGeral")
-	private List<MovimentoGastoPrevisto> gastosPrevistos = new ArrayList<>();
+	private List<GastoPrevisto> gastosPrevistos = new ArrayList<>();
 	
 	@OneToMany(mappedBy="contaGeral")
-	private List<MovimentoReceita> receitas = new ArrayList<>();
+	private List<Receita> receitas = new ArrayList<>();
 	
 	@OneToMany(mappedBy="contaGeral")
-	private List<MovimentoAplicacao> aplicacoes = new ArrayList<>();
+	private List<Investimento> investimentos = new ArrayList<>();
 	
 	public ContaGeral() {
 	}
@@ -98,28 +103,28 @@ public class ContaGeral implements Serializable{
 		this.faturasCredito = faturasCredito;
 	}
 
-	public List<MovimentoGastoPrevisto> getGastosPrevistos() {
+	public List<GastoPrevisto> getGastosPrevistos() {
 		return gastosPrevistos;
 	}
 
-	public void setGastosPrevistos(List<MovimentoGastoPrevisto> gastosPrevistos) {
+	public void setGastosPrevistos(List<GastoPrevisto> gastosPrevistos) {
 		this.gastosPrevistos = gastosPrevistos;
 	}
 
-	public List<MovimentoReceita> getReceitas() {
+	public List<Receita> getReceitas() {
 		return receitas;
 	}
 
-	public void setReceitas(List<MovimentoReceita> receitas) {
+	public void setReceitas(List<Receita> receitas) {
 		this.receitas = receitas;
 	}
 
-	public List<MovimentoAplicacao> getMovimentosAplicacao() {
-		return aplicacoes;
+	public List<Investimento> getInvestimentos() {
+		return investimentos;
 	}
 
-	public void setMovimentosAplicacao(List<MovimentoAplicacao> movimentosAplicacao) {
-		this.aplicacoes = movimentosAplicacao;
+	public void setInvestimentos(List<Investimento> investimentos) {
+		this.investimentos = investimentos;
 	}
 
 	@Override
@@ -146,7 +151,6 @@ public class ContaGeral implements Serializable{
 			return false;
 		return true;
 	}
-	
 	
 
 }

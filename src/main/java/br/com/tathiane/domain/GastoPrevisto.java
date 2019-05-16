@@ -1,9 +1,7 @@
 package br.com.tathiane.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,51 +9,52 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.tathiane.domain.enums.EstadoPagamento;
 
 @Entity
-public class FaturaCredito  implements Serializable{
+public class GastoPrevisto implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	
-	@JsonFormat(pattern="MM/yyyy")
+	@JsonFormat(pattern="dd/MM/yyyy")
+	private Date data;
+	
+	private Double valor;
 	private Date mes;
-	
-	private double total;
+	private String descricao;
 	private Integer estadoPagamento;
-	
-	@OneToMany(mappedBy="fatura")
-	private List<Credito> compras = new ArrayList<>();
 	
 	@ManyToOne
 	@JoinColumn(name="conta_id")
 	private ContaGeral contaGeral;
 	
-	public FaturaCredito() {
+	public GastoPrevisto() {
 	}
 
-	public FaturaCredito(Integer id, Date mes, double total, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
+	public GastoPrevisto(Integer id, Date data, Double valor, Date mes, String descricao, EstadoPagamento estadoPagamento,
+			ContaGeral contaGeral) {
 		super();
 		this.id = id;
+		this.data = data;
+		this.valor = valor;
 		this.mes = mes;
-		this.total = total;
+		this.descricao = descricao;
 		this.estadoPagamento = estadoPagamento.getCod();
 		this.contaGeral = contaGeral;
 	}
 
-	public Integer getId() {
-		return id;
+	public ContaGeral getContaGeral() {
+		return contaGeral;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
 	}
 
 	public Date getMes() {
@@ -66,12 +65,12 @@ public class FaturaCredito  implements Serializable{
 		this.mes = mes;
 	}
 
-	public double getTotal() {
-		return total;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setTotal(double total) {
-		this.total = total;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Integer getEstadoPagamento() {
@@ -81,21 +80,29 @@ public class FaturaCredito  implements Serializable{
 	public void setEstadoPagamento(Integer estadoPagamento) {
 		this.estadoPagamento = estadoPagamento;
 	}
-	
-	public List<Credito> getCompras() {
-		return compras;
+
+	public Integer getId() {
+		return id;
 	}
 
-	public void setCompras(List<Credito> compras) {
-		this.compras = compras;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
-	public ContaGeral getContaGeral() {
-		return contaGeral;
+	public Date getData() {
+		return data;
 	}
 
-	public void setContaGeral(ContaGeral contaGeral) {
-		this.contaGeral = contaGeral;
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Double getValor() {
+		return valor;
+	}
+
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 
 	@Override
@@ -114,7 +121,7 @@ public class FaturaCredito  implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FaturaCredito other = (FaturaCredito) obj;
+		GastoPrevisto other = (GastoPrevisto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -123,6 +130,4 @@ public class FaturaCredito  implements Serializable{
 		return true;
 	}
 	
-	
-
 }

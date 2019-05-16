@@ -7,29 +7,68 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-//mapeamento de herança criando uma tabela para cada subclasse (JOINED)
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
-@Inheritance(strategy=InheritanceType.JOINED)
-public abstract class Movimento implements Serializable {
+public class Debito implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id
+	@Id	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
-	private Date data;
-	private Double valor;
 	
-	public Movimento() {
+	@JsonFormat(pattern="dd/MM/yyyy")
+	private Date data;
+	
+	private Double valor;
+	private String descricao;
+	
+	@ManyToOne
+	@JoinColumn(name="categoria_id")
+	private Categoria categoria;
+	
+	@ManyToOne
+	@JoinColumn(name="fatura_id")
+	private FaturaDebito fatura;
+	
+	public Debito() {
 	}
 
-	public Movimento(Integer id, Date data, Double valor) {
+	public Debito(Integer id, Date data, Double valor, String descricao, Categoria categoria, FaturaDebito fatura) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
+		this.descricao = descricao;
+		this.categoria = categoria;
+		this.fatura = fatura;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public FaturaDebito getFatura() {
+		return fatura;
+	}
+
+	public void setFatura(FaturaDebito fatura) {
+		this.fatura = fatura;
 	}
 
 	public Integer getId() {
@@ -72,7 +111,7 @@ public abstract class Movimento implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Movimento other = (Movimento) obj;
+		Debito other = (Debito) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -82,5 +121,4 @@ public abstract class Movimento implements Serializable {
 	}
 	
 	
-
 }

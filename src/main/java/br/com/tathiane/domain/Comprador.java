@@ -21,7 +21,7 @@ public class Comprador implements Serializable{
 	private String nome;
 	
 	@OneToMany(mappedBy="comprador")
-	private List<MovimentoCredito> compras = new ArrayList<>();
+	private List<Credito> compras = new ArrayList<>();
 	
 	public Comprador() {
 	}
@@ -48,11 +48,11 @@ public class Comprador implements Serializable{
 		this.nome = nome;
 	}
 
-	public List<MovimentoCredito> getCompras() {
+	public List<Credito> getCompras() {
 		return compras;
 	}
 
-	public void setCompras(List<MovimentoCredito> compras) {
+	public void setCompras(List<Credito> compras) {
 		this.compras = compras;
 	}
 

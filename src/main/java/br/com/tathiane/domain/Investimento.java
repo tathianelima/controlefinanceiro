@@ -1,9 +1,7 @@
 package br.com.tathiane.domain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,43 +9,47 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.tathiane.domain.enums.EstadoPagamento;
 
 @Entity
-public class FaturaCredito  implements Serializable{
+public class Investimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
+	@Id	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	
-	@JsonFormat(pattern="MM/yyyy")
-	private Date mes;
+	@JsonFormat(pattern="dd/MM/yyyy")
+	private Date data;
 	
-	private double total;
+	private Double valor;
 	private Integer estadoPagamento;
-	
-	@OneToMany(mappedBy="fatura")
-	private List<Credito> compras = new ArrayList<>();
-	
+
 	@ManyToOne
 	@JoinColumn(name="conta_id")
 	private ContaGeral contaGeral;
 	
-	public FaturaCredito() {
+	public Investimento() {
 	}
 
-	public FaturaCredito(Integer id, Date mes, double total, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
+	public Investimento(Integer id, Date data, Double valor, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
 		super();
 		this.id = id;
-		this.mes = mes;
-		this.total = total;
+		this.data = data;
+		this.valor = valor;
 		this.estadoPagamento = estadoPagamento.getCod();
 		this.contaGeral = contaGeral;
+	}
+
+	public Integer getEstadoPagamento() {
+		return estadoPagamento;
+	}
+
+	public void setEstadoPagamento(Integer estadoPagamento) {
+		this.estadoPagamento = estadoPagamento;
 	}
 
 	public Integer getId() {
@@ -58,36 +60,20 @@ public class FaturaCredito  implements Serializable{
 		this.id = id;
 	}
 
-	public Date getMes() {
-		return mes;
+	public Date getData() {
+		return data;
 	}
 
-	public void setMes(Date mes) {
-		this.mes = mes;
+	public void setData(Date data) {
+		this.data = data;
 	}
 
-	public double getTotal() {
-		return total;
+	public Double getValor() {
+		return valor;
 	}
 
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	public Integer getEstadoPagamento() {
-		return estadoPagamento;
-	}
-
-	public void setEstadoPagamento(Integer estadoPagamento) {
-		this.estadoPagamento = estadoPagamento;
-	}
-	
-	public List<Credito> getCompras() {
-		return compras;
-	}
-
-	public void setCompras(List<Credito> compras) {
-		this.compras = compras;
+	public void setValor(Double valor) {
+		this.valor = valor;
 	}
 
 	public ContaGeral getContaGeral() {
@@ -114,7 +100,7 @@ public class FaturaCredito  implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		FaturaCredito other = (FaturaCredito) obj;
+		Investimento other = (Investimento) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -122,7 +108,6 @@ public class FaturaCredito  implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 
 }

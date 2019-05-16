@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 public class FaturaDebito implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -20,10 +22,12 @@ public class FaturaDebito implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
+	
+	@JsonFormat(pattern="MM/yyyy")
 	private Date mes;
 
 	@OneToMany(mappedBy="fatura")
-	private List<MovimentoDebito> compras = new ArrayList<>();
+	private List<Debito> compras = new ArrayList<>();
 	
 	@OneToOne
 	@JoinColumn(name="conta_id")
@@ -60,12 +64,12 @@ public class FaturaDebito implements Serializable{
 		this.mes = mes;
 	}
 	
-	public List<MovimentoDebito> getCompras() {
+	public List<Debito> getCompras() {
 		return compras;
 	}
 
 
-	public void setCompras(List<MovimentoDebito> compras) {
+	public void setCompras(List<Debito> compras) {
 		this.compras = compras;
 	}
 
