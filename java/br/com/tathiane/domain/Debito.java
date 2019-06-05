@@ -12,12 +12,10 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.tathiane.domain.enums.EstadoPagamento;
-
 @Entity
-public class Investimento implements Serializable {
+public class Debito implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
@@ -26,30 +24,52 @@ public class Investimento implements Serializable {
 	private Date data;
 	
 	private Double valor;
-	private Integer estadoPagamento;
-
+	private String descricao;
+	
+	@ManyToOne
+	@JoinColumn(name="categoria_id")
+	private Categoria categoria;
+	
+	
 	@ManyToOne
 	@JoinColumn(name="conta_id")
 	private ContaGeral contaGeral;
 	
-	public Investimento() {
+	public Debito() {
 	}
 
-	public Investimento(Integer id, Date data, Double valor, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
+	public Debito(Integer id, Date data, Double valor, String descricao, Categoria categoria, ContaGeral contaGeral) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
-		this.estadoPagamento = estadoPagamento.getCod();
+		this.descricao = descricao;
+		this.categoria = categoria;
 		this.contaGeral = contaGeral;
 	}
 
-	public Integer getEstadoPagamento() {
-		return estadoPagamento;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setEstadoPagamento(Integer estadoPagamento) {
-		this.estadoPagamento = estadoPagamento;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public ContaGeral getContaGeral() {
+		return contaGeral;
+	}
+
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
 	}
 
 	public Integer getId() {
@@ -76,14 +96,6 @@ public class Investimento implements Serializable {
 		this.valor = valor;
 	}
 
-	public ContaGeral getContaGeral() {
-		return contaGeral;
-	}
-
-	public void setContaGeral(ContaGeral contaGeral) {
-		this.contaGeral = contaGeral;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -100,7 +112,7 @@ public class Investimento implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Investimento other = (Investimento) obj;
+		Debito other = (Debito) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -108,6 +120,6 @@ public class Investimento implements Serializable {
 			return false;
 		return true;
 	}
-
-
+	
+	
 }

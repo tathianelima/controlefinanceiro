@@ -11,9 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.tathiane.domain.enums.EstadoPagamento;
 
 @Entity
 public class ContaGeral implements Serializable{
@@ -26,34 +28,113 @@ public class ContaGeral implements Serializable{
 	@JsonFormat(pattern="MM/yyyy")
 	private Date mes;
 	
-	private Double totalReal;
-	private Double totalPrevisto;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="contaGeral")
 	private List<FaturaCredito> faturasCredito = new ArrayList<>();
 	
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="contaGeral")
-	private FaturaDebito faturaDebito;
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="contaGeral")
+	private List<Debito> comprasDebito = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="contaGeral")
 	private List<GastoPrevisto> gastosPrevistos = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="contaGeral")
 	private List<Receita> receitas = new ArrayList<>();
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="contaGeral")
 	private List<Investimento> investimentos = new ArrayList<>();
+	
+	
 	
 	public ContaGeral() {
 	}
 
-	public ContaGeral(Integer id, Date mes, Double totalReal, Double totalPrevisto) {
+	public ContaGeral(Integer id, Date mes) {
 		super();
 		this.id = id;
 		this.mes = mes;
-		this.totalReal = totalReal;
-		this.totalPrevisto = totalPrevisto;
 	}
+	
+	public Double getTotalReceitas() {
+		double soma =0.0;
+		for(Receita rc : receitas) {
+			soma = soma + rc.getValor();
+		}
+		return soma;
+	}
+	
+	public Double getTotalGastoPrevisto() {
+		double soma =0.0;
+		for(GastoPrevisto gp : gastosPrevistos) {
+			soma = soma + gp.getValor();
+		}
+		return soma;
+	}
+	
+	public Double getTotalInvestimentos() {
+		double soma =0.0;
+		for(Investimento iv : investimentos) {
+			soma = soma + iv.getValor();
+		}
+		return soma;
+	}
+	
+	public Double getTotalDebito() {
+		double soma =0.0;
+		for(Debito db : comprasDebito) {
+			soma = soma + db.getValor();
+		}
+		return soma;
+	}
+	
+	public Double getTotalFaturasCredito() {
+		double soma =0.0;
+		for(FaturaCredito fd : faturasCredito) {
+			soma = soma + fd.getTotal();
+		}
+		return soma;
+	}
+	
+	public Double getTotalPrevisto() {
+		return getTotalReceitas() - (getTotalGastoPrevisto()+getTotalInvestimentos()+
+										getTotalDebito()+getTotalFaturasCredito());
+		 
+	}
+	
+	public Double getTotalReal() {
+		
+		double somaGP =0.0;
+		for(GastoPrevisto gp : gastosPrevistos) {
+			if(gp.getEstadoPagamento().equals(EstadoPagamento.PAGO.getCod())) { 
+				somaGP = somaGP + gp.getValor();
+			}
+		}
+		
+		double somaIV =0.0;
+		for(Investimento iv : investimentos) {
+			if(iv.getEstadoPagamento().equals(EstadoPagamento.PAGO.getCod())) {
+				somaIV = somaIV + iv.getValor();
+			}	
+		}
+		
+		double somaFC =0.0;
+		for(FaturaCredito fc : faturasCredito) {
+			if(fc.getEstadoPagamento().equals(EstadoPagamento.PAGO.getCod())) {
+				somaFC = somaFC + fc.getTotal();
+			}
+		}
+		
+		return getTotalReceitas() - (somaGP+somaIV+getTotalDebito()+somaFC);
+		 
+	}
+	
+	
+	
 
 	public Integer getId() {
 		return id;
@@ -69,30 +150,6 @@ public class ContaGeral implements Serializable{
 
 	public void setMes(Date mes) {
 		this.mes = mes;
-	}
-
-	public Double getTotalReal() {
-		return totalReal;
-	}
-
-	public void setTotalReal(Double totalReal) {
-		this.totalReal = totalReal;
-	}
-
-	public Double getTotalPrevisto() {
-		return totalPrevisto;
-	}
-
-	public void setTotalPrevisto(Double totalPrevisto) {
-		this.totalPrevisto = totalPrevisto;
-	}
-
-	public FaturaDebito getFaturaDebito() {
-		return faturaDebito;
-	}
-
-	public void setFaturaDebito(FaturaDebito faturaDebito) {
-		this.faturaDebito = faturaDebito;
 	}
 
 	public List<FaturaCredito> getFaturasCredito() {

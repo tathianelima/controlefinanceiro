@@ -13,8 +13,10 @@ import javax.persistence.ManyToOne;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.tathiane.domain.enums.EstadoPagamento;
+
 @Entity
-public class Credito implements Serializable {
+public class GastoPrevisto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -25,45 +27,44 @@ public class Credito implements Serializable {
 	private Date data;
 	
 	private Double valor;
+	private Date mes;
 	private String descricao;
+	private Integer estadoPagamento;
 	
-	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="categoria_id")
-	private Categoria categoria;
+	@JoinColumn(name="conta_id")
+	private ContaGeral contaGeral;
 	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name="comprador_id")
-	private Comprador comprador;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name="cartao_id")
-	private Cartao cartao;
-	
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name="fatura_id")
-	private FaturaCredito fatura;
-
-	
-	public Credito() {
+	public GastoPrevisto() {
 	}
 
-	public Credito(Integer id, Date data, Double valor, String descricao, Categoria categoria,
-			Comprador comprador, Cartao cartao, FaturaCredito fatura) {
+	public GastoPrevisto(Integer id, Date data, Double valor, Date mes, String descricao, EstadoPagamento estadoPagamento,
+			ContaGeral contaGeral) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
+		this.mes = mes;
 		this.descricao = descricao;
-		this.categoria = categoria;
-		this.comprador = comprador;
-		this.cartao = cartao;
-		this.fatura = fatura;
+		this.estadoPagamento = estadoPagamento.getCod();
+		this.contaGeral = contaGeral;
 	}
 
+	public ContaGeral getContaGeral() {
+		return contaGeral;
+	}
+
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
+	}
+
+	public Date getMes() {
+		return mes;
+	}
+
+	public void setMes(Date mes) {
+		this.mes = mes;
+	}
 
 	public String getDescricao() {
 		return descricao;
@@ -73,36 +74,12 @@ public class Credito implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Categoria getCategoria() {
-		return categoria;
+	public Integer getEstadoPagamento() {
+		return estadoPagamento;
 	}
 
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
-	public Comprador getComprador() {
-		return comprador;
-	}
-
-	public void setComprador(Comprador comprador) {
-		this.comprador = comprador;
-	}
-
-	public Cartao getCartao() {
-		return cartao;
-	}
-
-	public void setCartao(Cartao cartao) {
-		this.cartao = cartao;
-	}
-
-	public FaturaCredito getFatura() {
-		return fatura;
-	}
-
-	public void setFatura(FaturaCredito fatura) {
-		this.fatura = fatura;
+	public void setEstadoPagamento(Integer estadoPagamento) {
+		this.estadoPagamento = estadoPagamento;
 	}
 
 	public Integer getId() {
@@ -145,7 +122,7 @@ public class Credito implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Credito other = (Credito) obj;
+		GastoPrevisto other = (GastoPrevisto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -153,7 +130,5 @@ public class Credito implements Serializable {
 			return false;
 		return true;
 	}
-
-	
 	
 }

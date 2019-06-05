@@ -11,13 +11,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import br.com.tathiane.domain.enums.EstadoPagamento;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class GastoPrevisto implements Serializable {
+public class Receita implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
@@ -26,43 +25,24 @@ public class GastoPrevisto implements Serializable {
 	private Date data;
 	
 	private Double valor;
-	private Date mes;
 	private String descricao;
-	private Integer estadoPagamento;
+
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="conta_id")
 	private ContaGeral contaGeral;
 	
-	public GastoPrevisto() {
+	public Receita() {
 	}
 
-	public GastoPrevisto(Integer id, Date data, Double valor, Date mes, String descricao, EstadoPagamento estadoPagamento,
-			ContaGeral contaGeral) {
+	public Receita(Integer id, Date data, Double valor, String descricao, ContaGeral contaGeral) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
-		this.mes = mes;
 		this.descricao = descricao;
-		this.estadoPagamento = estadoPagamento.getCod();
 		this.contaGeral = contaGeral;
-	}
-
-	public ContaGeral getContaGeral() {
-		return contaGeral;
-	}
-
-	public void setContaGeral(ContaGeral contaGeral) {
-		this.contaGeral = contaGeral;
-	}
-
-	public Date getMes() {
-		return mes;
-	}
-
-	public void setMes(Date mes) {
-		this.mes = mes;
 	}
 
 	public String getDescricao() {
@@ -73,12 +53,12 @@ public class GastoPrevisto implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public Integer getEstadoPagamento() {
-		return estadoPagamento;
+	public ContaGeral getContaGeral() {
+		return contaGeral;
 	}
 
-	public void setEstadoPagamento(Integer estadoPagamento) {
-		this.estadoPagamento = estadoPagamento;
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
 	}
 
 	public Integer getId() {
@@ -121,7 +101,7 @@ public class GastoPrevisto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		GastoPrevisto other = (GastoPrevisto) obj;
+		Receita other = (Receita) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -130,4 +110,5 @@ public class GastoPrevisto implements Serializable {
 		return true;
 	}
 	
+
 }

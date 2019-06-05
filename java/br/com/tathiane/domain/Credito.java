@@ -11,12 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class Debito implements Serializable {
+public class Credito implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id	
+	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	
@@ -30,22 +31,37 @@ public class Debito implements Serializable {
 	@JoinColumn(name="categoria_id")
 	private Categoria categoria;
 	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="comprador_id")
+	private Comprador comprador;
+	
+	@ManyToOne
+	@JoinColumn(name="cartao_id")
+	private Cartao cartao;
+	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="fatura_id")
-	private FaturaDebito fatura;
+	private FaturaCredito fatura;
+
 	
-	public Debito() {
+	public Credito() {
 	}
 
-	public Debito(Integer id, Date data, Double valor, String descricao, Categoria categoria, FaturaDebito fatura) {
+	public Credito(Integer id, Date data, Double valor, String descricao, Categoria categoria,
+			Comprador comprador, Cartao cartao, FaturaCredito fatura) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
 		this.descricao = descricao;
 		this.categoria = categoria;
+		this.comprador = comprador;
+		this.cartao = cartao;
 		this.fatura = fatura;
 	}
+
 
 	public String getDescricao() {
 		return descricao;
@@ -63,11 +79,27 @@ public class Debito implements Serializable {
 		this.categoria = categoria;
 	}
 
-	public FaturaDebito getFatura() {
+	public Comprador getComprador() {
+		return comprador;
+	}
+
+	public void setComprador(Comprador comprador) {
+		this.comprador = comprador;
+	}
+
+	public Cartao getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
+	}
+
+	public FaturaCredito getFatura() {
 		return fatura;
 	}
 
-	public void setFatura(FaturaDebito fatura) {
+	public void setFatura(FaturaCredito fatura) {
 		this.fatura = fatura;
 	}
 
@@ -111,7 +143,7 @@ public class Debito implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Debito other = (Debito) obj;
+		Credito other = (Credito) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -119,6 +151,7 @@ public class Debito implements Serializable {
 			return false;
 		return true;
 	}
+
 	
 	
 }

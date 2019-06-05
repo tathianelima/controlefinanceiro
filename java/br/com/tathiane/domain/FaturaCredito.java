@@ -25,11 +25,11 @@ public class FaturaCredito  implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	
-	@JsonFormat(pattern="MM/yyyy")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date mes;
 	
-	private double total;
 	private Integer estadoPagamento;
+	
 	
 	@OneToMany(mappedBy="fatura")
 	private List<Credito> compras = new ArrayList<>();
@@ -41,14 +41,22 @@ public class FaturaCredito  implements Serializable{
 	public FaturaCredito() {
 	}
 
-	public FaturaCredito(Integer id, Date mes, double total, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
+	public FaturaCredito(Integer id, Date mes, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
 		super();
 		this.id = id;
 		this.mes = mes;
-		this.total = total;
 		this.estadoPagamento = estadoPagamento.getCod();
 		this.contaGeral = contaGeral;
 	}
+	
+	public Double getTotal() {
+		double soma =0.0;
+		for(Credito cd : compras) {
+			soma = soma + cd.getValor();
+		}
+		return soma;
+	}
+	
 
 	public Integer getId() {
 		return id;
@@ -64,14 +72,6 @@ public class FaturaCredito  implements Serializable{
 
 	public void setMes(Date mes) {
 		this.mes = mes;
-	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
 	}
 
 	public Integer getEstadoPagamento() {

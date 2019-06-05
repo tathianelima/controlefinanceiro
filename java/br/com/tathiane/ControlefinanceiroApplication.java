@@ -12,17 +12,21 @@ import br.com.tathiane.domain.Cartao;
 import br.com.tathiane.domain.Categoria;
 import br.com.tathiane.domain.Comprador;
 import br.com.tathiane.domain.ContaGeral;
-import br.com.tathiane.domain.FaturaCredito;
-import br.com.tathiane.domain.FaturaDebito;
 import br.com.tathiane.domain.Credito;
+import br.com.tathiane.domain.Debito;
+import br.com.tathiane.domain.FaturaCredito;
+import br.com.tathiane.domain.Receita;
 import br.com.tathiane.domain.enums.EstadoPagamento;
 import br.com.tathiane.repositories.CartaoRepository;
 import br.com.tathiane.repositories.CategoriaRepository;
 import br.com.tathiane.repositories.CompradorRepository;
 import br.com.tathiane.repositories.ContaGeralRepository;
-import br.com.tathiane.repositories.FaturaCreditoRepository;
-import br.com.tathiane.repositories.FaturaDebitoRepository;
 import br.com.tathiane.repositories.CreditoRepository;
+import br.com.tathiane.repositories.DebitoRepository;
+import br.com.tathiane.repositories.FaturaCreditoRepository;
+import br.com.tathiane.repositories.GastoPrevistoRepository;
+import br.com.tathiane.repositories.InvestimentoRepository;
+import br.com.tathiane.repositories.ReceitaRepository;
 
 @SpringBootApplication
 public class ControlefinanceiroApplication implements CommandLineRunner{   // CommandLineRunner - implementar alguma ação quando a execução começar
@@ -40,7 +44,14 @@ public class ControlefinanceiroApplication implements CommandLineRunner{   // Co
 	@Autowired
 	private ContaGeralRepository contaGeralRepository;
 	@Autowired
-	private FaturaDebitoRepository faturaDebitoRepository;
+	private DebitoRepository debitoRepository;
+	@Autowired
+	private InvestimentoRepository investimentoRepository;
+	@Autowired
+	private GastoPrevistoRepository gastoPrevistoRepository;
+	@Autowired
+	private ReceitaRepository receitaRepository;
+	
 	
 	
 	
@@ -53,8 +64,8 @@ public class ControlefinanceiroApplication implements CommandLineRunner{   // Co
 	@Override
 	public void run(String... args) throws Exception {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
-		SimpleDateFormat sdfCompleto = new SimpleDateFormat("dd/MM/yyyy");
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		
 		Categoria alimentacao = new Categoria(null, "Alimentação");
 		Categoria lazer = new Categoria(null, "Lazer");
@@ -65,16 +76,17 @@ public class ControlefinanceiroApplication implements CommandLineRunner{   // Co
 		Cartao santander = new Cartao(null, "Santander");
 		Cartao nuBank = new Cartao(null, "NuBank");
 		
-		ContaGeral junho = new ContaGeral(null, sdf.parse("06/2019"), 0.00, 0.00);
+		ContaGeral junho = new ContaGeral(null, sdf.parse("01/06/2019"));
 		
-		FaturaDebito faturaDebitoJunho = new FaturaDebito(null, sdf.parse("06/2019"), junho);
+		Receita receitaJunho = new Receita(null, sdf.parse("01/06/2019"), 1300.00, "vencimentos", junho);
+		Debito almoco = new Debito(null, sdf.parse("05/06/2019"), 7.00, "Almoço", alimentacao, junho);
+		Debito blusaFrio = new Debito(null, sdf.parse("05/06/2019"), 30.00, "Blusa", lazer, junho);
 
-		junho.setFaturaDebito(faturaDebitoJunho);
 		
-		FaturaCredito faturaCreditoJunho = new FaturaCredito(null, sdf.parse("06/2019"), 0, EstadoPagamento.NAOPAGO, junho);
+		FaturaCredito faturaCreditoJunho = new FaturaCredito(null, sdf.parse("01/06/2019"), EstadoPagamento.PAGO, junho);
 		
-		Credito blusa = new Credito(null, sdfCompleto.parse("03/06/2019"), 30.99, "Blusa", lazer, dani, santander, faturaCreditoJunho);
-		Credito comidas = new Credito(null, sdfCompleto.parse("02/06/2019"), 30.99, "Comidas", alimentacao, dani, nuBank, faturaCreditoJunho);
+		Credito blusa = new Credito(null, sdf.parse("03/06/2019"), 30.99, "Blusa", lazer, dani, santander, faturaCreditoJunho);
+		Credito comidas = new Credito(null, sdf.parse("02/06/2019"), 30.99, "Comidas", alimentacao, dani, nuBank, faturaCreditoJunho);
 		faturaCreditoJunho.getCompras().addAll(Arrays.asList(blusa, comidas));
 		
 	
@@ -85,9 +97,8 @@ public class ControlefinanceiroApplication implements CommandLineRunner{   // Co
 		cartaoRepository.saveAll(Arrays.asList(santander, nuBank));
 		faturaCreditoRepository.saveAll(Arrays.asList(faturaCreditoJunho));
 		creditoRepository.saveAll(Arrays.asList(blusa, comidas));
-		
-		faturaDebitoRepository.saveAll(Arrays.asList(faturaDebitoJunho));
-		
+		debitoRepository.saveAll(Arrays.asList(almoco, blusaFrio));
+		receitaRepository.saveAll(Arrays.asList(receitaJunho));
 	
 		
 	}

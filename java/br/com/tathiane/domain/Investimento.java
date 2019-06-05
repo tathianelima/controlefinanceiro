@@ -11,14 +11,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.tathiane.domain.enums.EstadoPagamento;
 
 @Entity
-public class Receita implements Serializable {
+public class Investimento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id
+	@Id	
 	@GeneratedValue(strategy=GenerationType.IDENTITY) 
 	private Integer id;
 	
@@ -26,33 +27,22 @@ public class Receita implements Serializable {
 	private Date data;
 	
 	private Double valor;
-	private String descricao;
 	private Integer estadoPagamento;
-	
+
 	@ManyToOne
 	@JoinColumn(name="conta_id")
 	private ContaGeral contaGeral;
 	
-	public Receita() {
+	public Investimento() {
 	}
 
-	public Receita(Integer id, Date data, Double valor, String descricao, EstadoPagamento estadoPagamento,
-			ContaGeral contaGeral) {
+	public Investimento(Integer id, Date data, Double valor, EstadoPagamento estadoPagamento, ContaGeral contaGeral) {
 		super();
 		this.id = id;
 		this.data = data;
 		this.valor = valor;
-		this.descricao = descricao;
 		this.estadoPagamento = estadoPagamento.getCod();
 		this.contaGeral = contaGeral;
-	}
-
-	public String getDescricao() {
-		return descricao;
-	}
-
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 
 	public Integer getEstadoPagamento() {
@@ -61,14 +51,6 @@ public class Receita implements Serializable {
 
 	public void setEstadoPagamento(Integer estadoPagamento) {
 		this.estadoPagamento = estadoPagamento;
-	}
-
-	public ContaGeral getContaGeral() {
-		return contaGeral;
-	}
-
-	public void setContaGeral(ContaGeral contaGeral) {
-		this.contaGeral = contaGeral;
 	}
 
 	public Integer getId() {
@@ -95,6 +77,14 @@ public class Receita implements Serializable {
 		this.valor = valor;
 	}
 
+	public ContaGeral getContaGeral() {
+		return contaGeral;
+	}
+
+	public void setContaGeral(ContaGeral contaGeral) {
+		this.contaGeral = contaGeral;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -111,7 +101,7 @@ public class Receita implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Receita other = (Receita) obj;
+		Investimento other = (Investimento) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -119,6 +109,6 @@ public class Receita implements Serializable {
 			return false;
 		return true;
 	}
-	
+
 
 }
