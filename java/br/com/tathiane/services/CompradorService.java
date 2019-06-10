@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.tathiane.domain.Comprador;
+import br.com.tathiane.dto.CompradorDTO;
 import br.com.tathiane.repositories.CompradorRepository;
 import br.com.tathiane.services.exception.ObjectNotFoundException;
 
@@ -24,6 +25,10 @@ public class CompradorService {
 	public Comprador insert(Comprador obj) {
 		obj.setId(null); 
 		return repo.save(obj);
+	}
+	
+	public Comprador fromDTO(CompradorDTO objDto) {
+		return new Comprador(objDto.getId(), objDto.getNome());
 	}
 	
 }
