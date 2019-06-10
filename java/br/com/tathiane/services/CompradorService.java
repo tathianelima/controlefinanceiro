@@ -16,7 +16,7 @@ public class CompradorService {
 	@Autowired //declaração de dependencia (será automaticamente instanciada pelo spring pelo mecanismo de injeção de dependencia ou inversão de controle
 	private CompradorRepository repo;
 	
-	public Comprador buscar(Integer id) {
+	public Comprador find(Integer id) {
 		Optional<Comprador> obj = repo.findById(id);    //Optional: Objeto container que carrega o objeto comprador (encapsula o objeto estando instanciado ou não)
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Comprador.class.getName()));	
@@ -27,8 +27,19 @@ public class CompradorService {
 		return repo.save(obj);
 	}
 	
+	public Comprador update(Comprador obj) {
+		Comprador newObj = find(obj.getId());
+		updateData(newObj, obj);
+		return repo.save(newObj);
+	}
+	
+	
 	public Comprador fromDTO(CompradorDTO objDto) {
 		return new Comprador(objDto.getId(), objDto.getNome());
+	}
+	
+	private void updateData(Comprador newObj, Comprador obj) {
+		newObj.setNome(obj.getNome());
 	}
 	
 }

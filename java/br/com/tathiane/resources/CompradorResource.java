@@ -28,7 +28,7 @@ public class CompradorResource {
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)    
 	public ResponseEntity<?> find(@PathVariable Integer id) {     
-		Comprador obj = service.buscar(id);
+		Comprador obj = service.find(id);
 		return ResponseEntity.ok().body(obj);		
 	}
 	
@@ -40,4 +40,14 @@ public class CompradorResource {
 					.path("/{id}").buildAndExpand(obj.getId()).toUri(); 			
 		return ResponseEntity.created(uri).build(); 								
 	}
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	public ResponseEntity<Void> update(@Valid @RequestBody CompradorDTO objDto, @PathVariable Integer id){
+		Comprador obj = service.fromDTO(objDto);
+		obj.setId(id);
+		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	
 }
