@@ -16,12 +16,14 @@ public class CompradorService {
 	private CompradorRepository repo;
 	
 	public Comprador buscar(Integer id) {
-		
 		Optional<Comprador> obj = repo.findById(id);    //Optional: Objeto container que carrega o objeto comprador (encapsula o objeto estando instanciado ou não)
-		
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Comprador.class.getName()));
-		
-		
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Comprador.class.getName()));	
 	}
+	
+	public Comprador insert(Comprador obj) {
+		obj.setId(null); 
+		return repo.save(obj);
+	}
+	
 }

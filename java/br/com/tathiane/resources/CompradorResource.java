@@ -1,11 +1,15 @@
 package br.com.tathiane.resources;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.tathiane.domain.Comprador;
 import br.com.tathiane.services.CompradorService;
@@ -18,14 +22,18 @@ public class CompradorResource {
 	@Autowired
 	private CompradorService service;
 	
-	//verbo http para a operação
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)    // /{id} - apelido do valor que sera adicionado a url
-	public ResponseEntity<?> find(@PathVariable Integer id) {     //PathVariable (para que o spring saiba que o id da url vai vir para esse id)
-		
+	
+	@RequestMapping(value="/{id}", method=RequestMethod.GET)    
+	public ResponseEntity<?> find(@PathVariable Integer id) {     
 		Comprador obj = service.buscar(id);
-		return ResponseEntity.ok().body(obj);	// ok - operação com sucesso body - a resposta tem como corpo a categoria buscada	
-		
-		//ResponseEntity é um objeto especial do spring boot que encapsula/armazena várias informações de uma resposta http para um serviço rest
-		// recebe <?> porque pode ser de vários tipos
+		return ResponseEntity.ok().body(obj);		
+	}
+	
+	@RequestMapping(method=RequestMethod.POST)
+	public ResponseEntity<Void> insert(@RequestBody Comprador obj){ 
+		obj = service.insert(obj); 
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+					.path("/{id}").buildAndExpand(obj.getId()).toUri(); 
+		return ResponseEntity.created(uri).build();
 	}
 }
